@@ -12,8 +12,10 @@
 //
 
 import SwiftUI
+import PhotosUI
 #if canImport(UIKit)
 import UIKit
+import CoreMotion
 #elseif canImport(AppKit)
 import AppKit
 #endif
@@ -43,13 +45,16 @@ import AppKit
  ✅ Design Phase Complete (v1.0 - February 7, 2026)
  
  Phase 2 - Feature Implementation Roadmap:
- - [ ] Photo picker integration (PhotosUI framework)
+ - [✓] Photo picker integration (PhotosUI framework)
+ - [✓] Polaroid development effect with shake acceleration ⭐️ AWESOME
+ - [✓] Haptic feedback (UIImpactFeedbackGenerator)
  - [ ] Save to Photos (PHPhotoLibrary)
  - [ ] Share to Messages (ShareLink/MessageUI)
  - [ ] Share to Instagram (UIActivityViewController/NSWorkspace)
- - [ ] Haptic feedback (UIImpactFeedbackGenerator)
  - [ ] Enhanced animations (parallax, ripple effects)
  - [ ] Persistence (optional: save captions/photos locally)
+ 
+ ⚠️  Note: Add NSMotionUsageDescription to Info.plist for shake detection
  */
 
 // MARK: - Color Tokens
@@ -147,7 +152,48 @@ struct PolaStrings {
         "didn't expect to feel this way but here we are",
         "universe really said it's your moment babe go x",
         "manifested this energy and it actually worked x",
-        "living for this chaos and refusing to apologize"
+        "living for this chaos and refusing to apologize",
+        "pure magic ✨",
+        "forever mood ♡",
+        "unreal tbh",
+        "peak vibes ☆",
+        "golden hour ☀",
+        "main character",
+        "soft life",
+        "chef's kiss",
+        "no filter",
+        "caught feelings",
+        "big energy",
+        "iconic moment",
+        "living rent free",
+        "slay behavior",
+        "heart eyes ♡♡",
+        "god tier",
+        "aesthetic af",
+        "brain rot",
+        "just vibes ☁",
+        "immaculate ✧",
+        "send tweet",
+        "period.",
+        "it's giving ✨",
+        "touch grass",
+        "too real",
+        "real ones know",
+        "built different",
+        "no thoughts",
+        "literally obsessed",
+        "vibe check ✓",
+        "dead serious",
+        "that's it",
+        "couldn't be me",
+        "felt that",
+        "this energy >>",
+        "lowkey iconic",
+        "actually insane",
+        "emotional damage",
+        "caught lacking",
+        "top tier",
+        "pure chaos ☆"
     ]
 
     static var randomCaptionPlaceholder: String {
@@ -228,8 +274,28 @@ extension Font {
 struct ContentView: View {
     // State
     @State private var photoImage: Image? = nil
-    @State private var caption: String = ""
     @State private var showSplash: Bool = true
+    @State private var caption: String = ""
+    
+    // Photo development state
+    @State private var isDeveloping: Bool = false
+    @State private var developmentProgress: Double = 0.0
+    @State private var developmentTimer: Timer? = nil
+    
+    // Photo Picker
+    @State private var selectedPhotoItem: PhotosPickerItem? = nil
+    @State private var showPhotoPicker = false
+    
+    // Shake detection (iOS)
+    #if canImport(UIKit)
+    @StateObject private var shakeDetector = ShakeDetector()
+    #endif
+    
+    // Camera (iOS only)
+    #if canImport(UIKit)
+    @State private var showCamera = false
+    @State private var showPhotoSourceSheet = false
+    #endif
 
     var body: some View {
         ZStack {
@@ -250,6 +316,49 @@ struct ContentView: View {
                     .onTapGesture { dismissSplash() }
             }
         }
+        .photosPicker(isPresented: $showPhotoPicker, selection: $selectedPhotoItem, matching: .images)
+        .onChange(of: selectedPhotoItem) { _, newItem in
+            Task {
+                await loadPhoto(from: newItem)
+            }
+        }
+        #if canImport(UIKit)
+        .sheet(isPresented: $showCamera) {
+            CameraView(image: $photoImage, onPhotoTaken: {
+                startPhotoDevelopment()
+            })
+        }
+        .confirmationDialog("Add Photo", isPresented: $showPhotoSourceSheet) {
+            Button("Take Photo") {
+                if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                    showCamera = true
+                }
+            }
+            Button("Choose from Library") {
+                showPhotoPicker = true
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+        .onChange(of: shakeDetector.shakeIntensity) { _, intensity in
+            if isDeveloping && intensity > 0.1 {
+                // Shake accelerates development
+                // More intense shakes = faster acceleration
+                let acceleration = intensity * 0.05 // 5% progress per intense shake
+                developmentProgress = min(1.0, developmentProgress + acceleration)
+                
+                // Haptic feedback on shake
+                let generator = UIImpactFeedbackGenerator(style: intensity > 0.5 ? .medium : .light)
+                generator.impactOccurred()
+                
+                if developmentProgress >= 1.0 {
+                    finishDevelopment()
+                    // Success haptic
+                    let successGenerator = UINotificationFeedbackGenerator()
+                    successGenerator.notificationOccurred(.success)
+                }
+            }
+        }
+        #endif
     }
 
     // Main content with responsive scale and safe-area aware paddings
@@ -266,7 +375,14 @@ struct ContentView: View {
 
                     Spacer()
 
-                    PolaFrame(photoImage: photoImage, caption: $caption, scale: scale)
+                    PolaFrame(
+                        photoImage: photoImage, 
+                        caption: $caption, 
+                        scale: scale, 
+                        onAddPhoto: addPhoto,
+                        isDeveloping: isDeveloping,
+                        developmentProgress: developmentProgress
+                    )
 
                     Spacer()
 
@@ -285,6 +401,78 @@ struct ContentView: View {
     private func scaleFactor(for size: CGSize) -> CGFloat {
         let base = size.width / PolaLayout.referenceWidth
         return min(max(base, PolaLayout.minScale), PolaLayout.maxScale)
+    }
+    
+    // Photo loading from PhotosPicker
+    @MainActor
+    private func loadPhoto(from item: PhotosPickerItem?) async {
+        guard let item = item else { return }
+        
+        if let data = try? await item.loadTransferable(type: Data.self) {
+            #if canImport(UIKit)
+            if let uiImage = UIImage(data: data) {
+                photoImage = Image(uiImage: uiImage)
+                startPhotoDevelopment()
+            }
+            #elseif canImport(AppKit)
+            if let nsImage = NSImage(data: data) {
+                photoImage = Image(nsImage: nsImage)
+                startPhotoDevelopment()
+            }
+            #endif
+        }
+    }
+    
+    // Start photo development animation
+    private func startPhotoDevelopment() {
+        isDeveloping = true
+        developmentProgress = 0.0
+        
+        // Development happens over 20 seconds
+        let developmentDuration: Double = 20.0
+        let updateInterval: Double = 0.1
+        let progressIncrement = updateInterval / developmentDuration
+        
+        developmentTimer = Timer.scheduledTimer(withTimeInterval: updateInterval, repeats: true) { [self] timer in
+            if developmentProgress < 1.0 {
+                developmentProgress += progressIncrement
+            } else {
+                finishDevelopment()
+            }
+        }
+    }
+    
+    // Finish development
+    private func finishDevelopment() {
+        developmentTimer?.invalidate()
+        developmentTimer = nil
+        isDeveloping = false
+        developmentProgress = 1.0
+    }
+    
+    // Speed up development based on shake intensity (called from ShakeDetector)
+    func accelerateDevelopment(by amount: Double) {
+        if isDeveloping {
+            developmentProgress = min(1.0, developmentProgress + amount)
+            if developmentProgress >= 1.0 {
+                finishDevelopment()
+            }
+        }
+    }
+    
+    // Show photo source options (iOS only, macOS just opens picker)
+    private func addPhoto() {
+        #if canImport(UIKit)
+        // Check if camera is available before showing sheet
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            showPhotoSourceSheet = true
+        } else {
+            // No camera available, go straight to library
+            showPhotoPicker = true
+        }
+        #else
+        showPhotoPicker = true
+        #endif
     }
 }
 
@@ -522,6 +710,9 @@ struct PolaFrame: View {
     let photoImage: Image?
     @Binding var caption: String
     let scale: CGFloat
+    let onAddPhoto: () -> Void
+    let isDeveloping: Bool
+    let developmentProgress: Double
 
     @FocusState private var isCaptionFocused: Bool
     @State private var isFramePressed = false
@@ -552,6 +743,30 @@ struct PolaFrame: View {
                                 .fill(.white.opacity(PolaLayout.filmGrainOpacity))
                                 .blendMode(.screen)
                         )
+                        .overlay(
+                            // Polaroid development overlay - white that fades away
+                            Rectangle()
+                                .fill(.white)
+                                .opacity(isDeveloping ? 1.0 - developmentProgress : 0.0)
+                                .allowsHitTesting(false)
+                        )
+                        .overlay(
+                            // Development progress indicator (subtle bottom bar)
+                            GeometryReader { geo in
+                                if isDeveloping {
+                                    VStack {
+                                        Spacer()
+                                        HStack(spacing: 0) {
+                                            Rectangle()
+                                                .fill(Color.polaDateStamp.opacity(0.6))
+                                                .frame(width: geo.size.width * developmentProgress)
+                                            Spacer(minLength: 0)
+                                        }
+                                        .frame(height: 2)
+                                    }
+                                }
+                            }
+                        )
                         .transition(.opacity.combined(with: .scale(scale: 0.95)))
                 } else {
                     PlaceholderView(scale: scale)
@@ -576,6 +791,12 @@ struct PolaFrame: View {
             .clipShape(RoundedRectangle(cornerRadius: 4 * scale))
             .padding(.top, PolaLayout.framePadding * scale)
             .padding(.horizontal, PolaLayout.framePadding * scale)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                if photoImage == nil {
+                    onAddPhoto()
+                }
+            }
 
             // Divider
             Rectangle()
@@ -589,6 +810,21 @@ struct PolaFrame: View {
                 isCaptionFocused: $isCaptionFocused,
                 currentPlaceholder: currentPlaceholder,
                 scale: scale
+            )
+            .padding(.horizontal, PolaLayout.framePadding * scale)
+            .overlay(
+                // Development hint text
+                Group {
+                    if isDeveloping {
+                        VStack {
+                            Spacer()
+                            Text("shake to develop faster")
+                                .font(.polaBody(size: 10 * scale))
+                                .foregroundColor(.gray.opacity(0.5))
+                                .padding(.bottom, 4 * scale)
+                        }
+                    }
+                }
             )
         }
         .frame(width: PolaLayout.frameWidth * scale, height: PolaLayout.frameHeight * scale)
@@ -701,7 +937,7 @@ private struct CaptionArea: View {
                 .lineLimit(3...4)
                 .lineSpacing(2 * scale)
                 .kerning(0.5)
-                .padding(.horizontal, 38 * scale)
+                .padding(.horizontal, 8 * scale)
                 .padding(.vertical, 10 * scale)
                 .frame(height: PolaLayout.captionHeight * scale)
                 .focused($isCaptionFocused)
@@ -852,4 +1088,102 @@ struct SplashScreen: View {
 }
 
 #Preview { ContentView() }
+
+// MARK: - Shake Detector (iOS Only)
+#if canImport(UIKit)
+import Combine
+
+class ShakeDetector: ObservableObject {
+    private let motionManager = CMMotionManager()
+    private var cancellables = Set<AnyCancellable>()
+    
+    @Published var shakeIntensity: Double = 0.0
+    
+    init() {
+        startDetecting()
+    }
+    
+    deinit {
+        stopDetecting()
+    }
+    
+    private func startDetecting() {
+        guard motionManager.isAccelerometerAvailable else { return }
+        
+        motionManager.accelerometerUpdateInterval = 0.1
+        motionManager.startAccelerometerUpdates(to: .main) { [weak self] data, error in
+            guard let data = data, error == nil else { return }
+            
+            let acceleration = data.acceleration
+            
+            // Calculate total acceleration magnitude
+            let magnitude = sqrt(
+                pow(acceleration.x, 2) +
+                pow(acceleration.y, 2) +
+                pow(acceleration.z, 2)
+            )
+            
+            // Threshold for detecting shake (1.0 is gravity, anything above ~2.0 is a shake)
+            if magnitude > 2.0 {
+                let intensity = min((magnitude - 2.0) / 2.0, 1.0) // Normalize shake intensity
+                self?.shakeIntensity = intensity
+            } else {
+                self?.shakeIntensity = 0.0
+            }
+        }
+    }
+    
+    private func stopDetecting() {
+        motionManager.stopAccelerometerUpdates()
+    }
+}
+#endif
+
+// MARK: - Camera View (iOS Only)
+#if canImport(UIKit)
+import UIKit
+import AVFoundation
+
+struct CameraView: UIViewControllerRepresentable {
+    @Binding var image: Image?
+    var onPhotoTaken: () -> Void
+    @Environment(\.dismiss) private var dismiss
+    
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.cameraCaptureMode = .photo
+        picker.allowsEditing = false
+        picker.delegate = context.coordinator
+        return picker
+    }
+    
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let parent: CameraView
+        
+        init(_ parent: CameraView) {
+            self.parent = parent
+        }
+        
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let uiImage = info[.originalImage] as? UIImage {
+                parent.image = Image(uiImage: uiImage)
+                parent.onPhotoTaken()
+            }
+            parent.dismiss()
+        }
+        
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.dismiss()
+        }
+    }
+}
+#endif
+
 

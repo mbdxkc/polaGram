@@ -1,0 +1,95 @@
+📋 Required Info.plist Entries for polaGram
+============================================
+
+Add these keys to your Info.plist file for privacy permissions:
+
+Option 1: Add via Xcode Target Settings
+----------------------------------------
+1. Select your polaGram target
+2. Go to "Info" tab
+3. Add these custom iOS target properties:
+
+🎥 CAMERA & PHOTOS (Required)
+Key: Privacy - Camera Usage Description
+Value: Take photos for your Polaroid memories
+
+Key: Privacy - Photo Library Usage Description  
+Value: Choose photos to share as Polaroids
+
+Key: Privacy - Photo Library Additions Usage Description
+Value: Save your Polaroid creations to Photos
+
+🏃 MOTION (Required for shake detection)
+Key: Privacy - Motion Usage Description
+Value: Detect shaking to speed up photo development
+
+🎤 MICROPHONE (Optional - add if recording video)
+Key: Privacy - Microphone Usage Description
+Value: Record audio for video Polaroids
+
+📍 LOCATION (Optional - add if geotagging photos)
+Key: Privacy - Location When In Use Usage Description
+Value: Add location information to your photos
+
+Key: Privacy - Location Always and When In Use Usage Description
+Value: Add location information to your photos
+
+🔔 NOTIFICATIONS (Optional - add if sending notifications)
+Key: Privacy - User Tracking Usage Description
+Value: We don't track you - this is just for local notifications
+
+
+Option 2: Edit Info.plist Directly
+-----------------------------------
+Add these entries to your Info.plist XML:
+
+<!-- CAMERA & PHOTOS (Required) -->
+<key>NSCameraUsageDescription</key>
+<string>Take photos for your Polaroid memories</string>
+
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Choose photos to share as Polaroids</string>
+
+<key>NSPhotoLibraryAddUsageDescription</key>
+<string>Save your Polaroid creations to Photos</string>
+
+<!-- MOTION (Required for shake detection) -->
+<key>NSMotionUsageDescription</key>
+<string>Detect shaking to speed up photo development</string>
+
+<!-- MOTION (Optional - add if using device motion) -->
+<key>NSMotionUsageDescription</key>
+<string>Detect device motion for camera effects</string>
+
+<!-- MICROPHONE (Optional) -->
+<key>NSMicrophoneUsageDescription</key>
+<string>Record audio for video Polaroids</string>
+
+<!-- LOCATION (Optional) -->
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>Add location information to your photos</string>
+
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>Add location information to your photos</string>
+
+<!-- CONTACTS (Optional - add if sharing to contacts) -->
+<key>NSContactsUsageDescription</key>
+<string>Share Polaroids with your contacts</string>
+
+<!-- CALENDARS (Optional - add if creating events) -->
+<key>NSCalendarsUsageDescription</key>
+<string>Create calendar events from your Polaroid memories</string>
+
+
+⚠️  IMPORTANT NOTES
+-------------------
+- Without required entries, the app will CRASH when trying to access camera/photos!
+- Only add keys for permissions your app actually uses
+- Be specific and honest in your descriptions
+- Users see these messages when granting permissions
+
+Testing Camera:
+- Physical iPhone/iPad required (camera doesn't work in simulator)
+- Grant permissions when prompted
+- If denied, user must enable in Settings > Privacy & Security > Camera
+- Reset permissions: Settings > General > Transfer or Reset > Reset Location & Privacy
