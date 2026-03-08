@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save your pola creations to Photos</string>
+	
+	<key>NSMotionUsageDescription</key>
+	<string>Detect shaking to speed up photo development</string>
+	
+	<key>NSCameraUsageDescription</key>
+	<string>Take photos for your pola memories</string>
+	
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Choose photos to share as polas</string>
+</dict>
+</plist>

@@ -3,9 +3,11 @@
 //  polaGram
 //
 //  Created by valdez campos on 2/7/26.
+//  mediabrilliance.io
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct polaGramApp: App {
@@ -13,5 +15,6 @@ struct polaGramApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: SavedPola.self)
     }
 }

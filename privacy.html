@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  polaGram - Privacy Policy                                                     ║
+║  https://www.mediabrilliance.com/polagram/privacy                              ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  Version: 1.0.0                                                                ║
+║  Effective Date: March 7, 2026                                                 ║
+║  Last Updated: March 8, 2026                                                   ║
+║  Author: mediaBrilliance                                                       ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  DESCRIPTION                                                                   ║
+║  Privacy policy for polaGram iOS app. Required for App Store submission.      ║
+║  Documents data handling practices, permissions, and user rights.              ║
+║                                                                                ║
+║  KEY POINTS                                                                    ║
+║  - No data collection: All processing happens on-device                        ║
+║  - No analytics: No SDKs, crash reporting, or tracking                         ║
+║  - No cloud sync: Photos stored locally only                                   ║
+║  - Permissions: Camera, Photos (read/write), Motion sensors                    ║
+║                                                                                ║
+║  LEGAL COMPLIANCE                                                              ║
+║  - Apple App Store Guidelines (5.1.1, 5.1.2)                                   ║
+║  - GDPR (no personal data collected, so minimal requirements)                  ║
+║  - CCPA (no selling of personal information)                                   ║
+║  - COPPA (no data collected from children)                                     ║
+║                                                                                ║
+║  SEO NOTES                                                                     ║
+║  - noindex directive: Privacy pages shouldn't rank in search                   ║
+║  - Canonical URL: Points to this page as authoritative source                  ║
+║  - Schema.org: Not included (legal pages don't benefit from rich snippets)     ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+-->
+<head>
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         META: Character encoding and viewport
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SEO: Page title and description
+         Even with noindex, good metadata helps if shared or linked
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <title>Privacy Policy - polaGram | mediaBrilliance</title>
+    <meta name="description" content="Privacy policy for polaGram iOS app. No data collection, no analytics, no tracking. All photos stored locally on your device.">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SEO: Robots directives
+         - noindex: Don't show in search results (privacy pages shouldn't rank)
+         - follow: Still allow crawling links (for site structure understanding)
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <meta name="robots" content="noindex, follow">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SEO: Canonical URL
+         Prevents duplicate content if accessed via different URLs
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <link rel="canonical" href="https://www.mediabrilliance.com/polagram/privacy.html">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SEO: Open Graph (for social sharing)
+         Minimal tags since this is a legal page
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <meta property="og:title" content="Privacy Policy - polaGram">
+    <meta property="og:description" content="Privacy policy for polaGram iOS app. No data collection, no tracking.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.mediabrilliance.com/polagram/privacy.html">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         STYLES: Embedded CSS
+
+         Design notes:
+         - Dark theme matches app aesthetic and reduces eye strain
+         - High contrast text (light on dark) for readability
+         - Pink accent color (#E87DA0) from app brand palette
+         - Clean typography with system fonts for fast loading
+         - Table styling for permissions documentation
+         - Highlight box for key privacy statement
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <style>
+        /* ─────────────────────────────────────────────────────────────────────
+           CSS CUSTOM PROPERTIES
+
+           Simplified color palette for legal document.
+           Uses app brand accent (--accent) for visual consistency.
+           ───────────────────────────────────────────────────────────────────── */
+        :root {
+            --bg: #1a1a1a;           /* Page background - near black */
+            --text: #e8e8e8;         /* Primary text - off white */
+            --muted: #888;           /* Secondary text - medium gray */
+            --accent: #E87DA0;       /* Brand accent - polaPink */
+            --border: #333;          /* Borders and dividers */
+            --highlight-bg: #252525; /* Highlight box background */
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           CSS RESET
+           ───────────────────────────────────────────────────────────────────── */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           BODY STYLES
+
+           Centered, readable column with comfortable padding.
+           System font stack for fast loading and native feel.
+           ───────────────────────────────────────────────────────────────────── */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+            max-width: 700px;  /* Optimal reading width */
+            margin: 0 auto;   /* Center the content */
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           TYPOGRAPHY
+
+           H1: Page title in accent color
+           H2: Section headings with underline
+           ───────────────────────────────────────────────────────────────────── */
+        h1 {
+            color: var(--accent);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            color: var(--text);
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           CONTENT ELEMENTS
+
+           Paragraphs and lists with consistent spacing.
+           ───────────────────────────────────────────────────────────────────── */
+        p, li {
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           TABLE STYLES
+
+           Used for permissions documentation.
+           Dark theme with accent-colored headers.
+           ───────────────────────────────────────────────────────────────────── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        /* Table header - darker background with accent text */
+        th {
+            background: var(--highlight-bg);
+            color: var(--accent);
+        }
+
+        /* Table cells - slightly lighter than background */
+        td {
+            background: #1f1f1f;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           META INFORMATION
+
+           Document metadata (effective date, version, etc.)
+           ───────────────────────────────────────────────────────────────────── */
+        .meta {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           HIGHLIGHT BOX
+
+           Emphasized callout for key privacy statement.
+           Left border accent draws attention.
+           ───────────────────────────────────────────────────────────────────── */
+        .highlight {
+            background: var(--highlight-bg);
+            border-left: 3px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           LINKS
+
+           Accent color links with no default underline.
+           ───────────────────────────────────────────────────────────────────── */
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           FOOTER
+
+           Copyright and attribution.
+           Separated from content with top border.
+           ───────────────────────────────────────────────────────────────────── */
+        footer {
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           BACK LINK
+
+           Navigation link to return to main site.
+           ───────────────────────────────────────────────────────────────────── */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .back-link::before {
+            content: '← ';
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         NAVIGATION: Back link to main site
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <nav aria-label="Back navigation">
+        <a href="index.html" class="back-link">Back to polaGram</a>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         HEADER: Page title and metadata
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <header>
+        <h1>Privacy Policy</h1>
+        <p class="meta">
+            <strong>polaGram</strong><br>
+            Effective Date: March 7, 2026<br>
+            Last Updated: March 8, 2026
+        </p>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         MAIN CONTENT: Privacy policy sections
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <main role="main">
+
+        <!-- ───────────────────────────────────────────────────────────────────
+             SECTION: Overview
+             Brief introduction to the app and privacy approach
+             ─────────────────────────────────────────────────────────────────── -->
+        <section aria-labelledby="overview-heading">
+            <h2 id="overview-heading">Overview</h2>
+            <p>
+                polaGram is a photo app that creates instant-style photos with vintage effects.
+                Your privacy matters. This policy explains what data the app accesses and how it's used.
+            </p>
+        </section>
+
+        <!-- ───────────────────────────────────────────────────────────────────
+             SECTION: Data Collection
+             Key statement: NO data is collected or transmitted
+
+             This is the most important section for App Store review.
+             The highlight box emphasizes our zero-collection policy.
+             ─────────────────────────────────────────────────────────────────── -->
+        <section aria-labelledby="data-collection-heading">
+            <h2 id="data-collection-heading">Data Collection</h2>
+            <div class="highlight">
+                <strong>polaGram does not collect, transmit, or store any personal data on external servers.</strong>
+                All data stays on your device.
+            </div>
+        </section>
+
+        <!-- ───────────────────────────────────────────────────────────────────
+             SECTION: Device Permissions
+             Documents each iOS permission requested and its purpose
+
+             Table format provides clear, scannable information for:
+             - App Store reviewers
+             - Users concerned about privacy
+             - Legal compliance documentation
+             ─────────────────────────────────────────────────────────────────── -->
+        <section aria-labelledby="permissions-heading">
+            <h2 id="permissions-heading">Device Permissions</h2>
+            <p>The app requests the following permissions:</p>
+
+            <table>
+                <!-- Table header -->
+                <thead>
+                    <tr>
+                        <th scope="col">Permission</th>
+                        <th scope="col">Purpose</th>
+                        <th scope="col">Data Handling</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <!-- Permission: Camera (NSCameraUsageDescription) -->
+                    <tr>
+                        <td>Camera</td>
+                        <td>Take photos for polas</td>
+                        <td>Photos processed locally, never uploaded</td>
+                    </tr>
+
+                    <!-- Permission: Photo Library Read (NSPhotoLibraryUsageDescription) -->
+                    <tr>
+                        <td>Photo Library (Read)</td>
+                        <td>Choose existing photos</td>
+                        <td>Selected photos processed locally only</td>
+                    </tr>
+
+                    <!-- Permission: Photo Library Write (NSPhotoLibraryAddUsageDescription) -->
+                    <tr>
+                        <td>Photo Library (Write)</td>
+                        <td>Save finished polas</td>
+                        <td>Saved directly to your device</td>
+                    </tr>
+
+                    <!-- Permission: Motion (NSMotionUsageDescription) -->
+                    <tr>
+                        <td>Motion Sensors</td>
+                        <td>Shake detection, parallax effects</td>
+                        <td>Motion data processed in real-time, never stored</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ───────────────────────────────────────────────────────────────────
+             SECTION: Local Storage
+             Explains what data is stored on-device
+             ─────────────────────────────────────────────────────────────────── -->
+        <section aria-labelledby="storage-heading">
+            <h2 id="storage-heading">Local Storage</h2>
+            <ul>
+                <li>
+                    <strong>Saved Polas</strong>: Stored locally on your device using iOS/macOS built-in storage
+                </li>
+                <li>
+                    <strong>Preferences</strong>: App settings (watermark toggle, onboarding status) stored locally
+                </li>
+                <li>
+                    <strong>No Cloud Sync</strong>: polaGram does not sync data to any cloud service
+                </li>
+            </ul>
+        </section>
+
+        <!-- ───────────────────────────────────────────────────────────────────
+             SECTION: Third-Party Sharing
+             Clarifies user-initiated sharing vs. automatic data sharing
+             ─────────────────────────────────────────────────────────────────── -->
+        <section aria-labelledby="sharing-heading">
+            <h2 id="sharing-heading">Third-Party Sharing</h2>
+            <p>When you choose to share a pola:</p>
+            <ul>
+                <li>
+                    <strong>Messages</strong>: Opens iOS Messages app with your pola attached
+                </li>
+                <li>
+                    <strong>Instagram Stories</strong>: Opens Instagram app with your pola (requires Instagram installed)
+                </li>
+                <li>
+                    <strong>Photos</strong>: Saves to your device's photo library
+                </li>
+            </ul>
+            <p>polaGram does not share data with advertisers, analytics services, or any third parties.</p>
+        </section>
+
+        <!-- ───────────────────────────────────────────────────────────────────
+             SECTION: Analytics & Tracking
+             Explicit statement of what is NOT included in the app
+             ─────────────────────────────────────────────────────────────────── -->
+        <section aria-labelledby="analytics-heading">
+            <h2 id="analytics-heading">Analytics &amp; Tracking</h2>
+            <ul>
+                <li>No analytics SDKs</li>
+                <li>No crash reporting services</li>
+                <li>No advertising frameworks</li>
+                <li>No user tracking of any kind</li>
+            </ul>
+        </section>
+
+        <!-- ───────────────────────────────────────────────────────────────────
+             SECTION: Children's Privacy
+             COPPA compliance statement
+             ─────────────────────────────────────────────────────────────────── -->
+        <section aria-labelledby="children-heading">
+            <h2 id="children-heading">Children's Privacy</h2>
+            <p>
+                polaGram does not collect personal information from anyone, including children under 13.
+            </p>
+        </section>
+
+        <!-- ───────────────────────────────────────────────────────────────────
+             SECTION: Data Retention
+             Explains user control over their data
+             ─────────────────────────────────────────────────────────────────── -->
+        <section aria-labelledby="retention-heading">
+            <h2 id="retention-heading">Data Retention</h2>
+            <p>Since all data is stored locally on your device:</p>
+            <ul>
+                <li>Delete saved polas anytime from the Gallery</li>
+                <li>Uninstalling the app removes all polaGram data</li>
+            </ul>
+        </section>
+
+        <!-- ───────────────────────────────────────────────────────────────────
+             SECTION: Changes to This Policy
+             Standard legal boilerplate for policy updates
+             ─────────────────────────────────────────────────────────────────── -->
+        <section aria-labelledby="changes-heading">
+            <h2 id="changes-heading">Changes to This Policy</h2>
+            <p>
+                Updates will be posted here with a new "Last Updated" date.
+                Continued use of the app constitutes acceptance of changes.
+            </p>
+        </section>
+
+        <!-- ───────────────────────────────────────────────────────────────────
+             SECTION: Contact
+             Contact information for privacy inquiries
+             ─────────────────────────────────────────────────────────────────── -->
+        <section aria-labelledby="contact-heading">
+            <h2 id="contact-heading">Contact</h2>
+            <p>Questions about this privacy policy:</p>
+            <address>
+                <strong>mediaBrilliance</strong><br>
+                Email: <a href="mailto:privacy@mediabrilliance.com">privacy@mediabrilliance.com</a><br>
+                Web: <a href="https://www.mediabrilliance.com">mediabrilliance.com</a>
+            </address>
+        </section>
+
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         FOOTER: Copyright
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <footer role="contentinfo">
+        <p>&copy; 2026 mediaBrilliance. All rights reserved.</p>
+    </footer>
+</body>
+</html>

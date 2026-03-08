@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  polaGram - Landing Page                                                       ║
+║  https://polagram.mediabrilliance.io                                     ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  Version: 1.1.0                                                                ║
+║  Last Updated: March 8, 2026                                                   ║
+║  Author: mediaBrilliance                                                       ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  DESCRIPTION                                                                   ║
+║  Marketing landing page for polaGram iOS app. Showcases features, explains    ║
+║  the user workflow, and highlights privacy-first approach.                     ║
+║                                                                                ║
+║  DESIGN SYSTEM                                                                 ║
+║  CSS variables mirror the Swift design tokens from the iOS app:                ║
+║  - Colors.swift → CSS custom properties (--polaPink, --polaSilverLight, etc.) ║
+║  - Fonts.swift → font-family declarations (Marker Felt, Noteworthy, Avenir)   ║
+║  - Layout.swift → sizing variables (--frameWidth, --cornerRadius)             ║
+║                                                                                ║
+║  SECTIONS                                                                      ║
+║  1. Hero - Logo, tagline, App Store CTA                                        ║
+║  2. Features - 6-card grid highlighting app capabilities                       ║
+║  3. How It Works - 4-step workflow guide                                       ║
+║  4. Privacy - Trust badges and privacy commitment                              ║
+║  5. Footer - Links and copyright                                               ║
+║                                                                                ║
+║  SEO                                                                           ║
+║  - Schema.org MobileApplication structured data                                ║
+║  - Open Graph and Twitter Card meta tags                                       ║
+║  - Semantic HTML5 elements (header, main, section, footer)                     ║
+║  - Descriptive alt text and ARIA labels                                        ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+-->
+<head>
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         META: Character encoding and viewport
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SEO: Primary meta tags
+         - Title: 50-60 chars, primary keyword + brand
+         - Description: 150-160 chars, compelling summary with keywords
+         - Keywords: Relevant search terms (supplementary, not primary ranking)
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <title>polaGram - Instant Photo App with Vintage Polaroid Effects | iOS</title>
+    <meta name="description" content="Create authentic instant-style photos with vintage polaroid effects. Capture moments, shake to develop, add handwritten captions, and share. Free iOS app with no ads or tracking.">
+    <meta name="keywords" content="polaroid app, instant photo app, vintage photo filter, retro camera app, photo effects iOS, shake to develop, instant camera, polaroid filter, photo caption app, nostalgic photos, film camera app, instant film effect">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SEO: Canonical URL and language
+         Prevents duplicate content issues, declares primary URL
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <link rel="canonical" href="https://www.mediabrilliance.com/polagram/">
+    <meta name="language" content="en">
+    <meta name="author" content="mediaBrilliance">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SEO: Robots directives
+         - index: Allow search engines to index this page
+         - follow: Allow crawling of links on this page
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SEO: Open Graph meta tags (Facebook, LinkedIn, etc.)
+         Controls how the page appears when shared on social media
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <meta property="og:title" content="polaGram - Instant Photo App with Vintage Effects">
+    <meta property="og:description" content="Create authentic instant-style photos. Capture, shake to develop, caption, and share your moments. Free iOS app, no ads.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.mediabrilliance.com/polagram/">
+    <meta property="og:site_name" content="polaGram">
+    <meta property="og:locale" content="en_US">
+    <!-- TODO: Add og:image when app icon/screenshot is available
+    <meta property="og:image" content="https://www.mediabrilliance.com/polagram/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="polaGram app showing a vintage-style instant photo">
+    -->
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SEO: Twitter Card meta tags
+         Controls appearance in Twitter/X shares. "summary_large_image" shows
+         a large preview image above the title and description.
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="polaGram - Instant Photo App">
+    <meta name="twitter:description" content="Vintage polaroid-style photos. Capture, shake to develop, caption, share. Free, no ads, no tracking.">
+    <!-- TODO: Add twitter:image when available
+    <meta name="twitter:image" content="https://www.mediabrilliance.com/polagram/twitter-card.png">
+    -->
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SEO: App-specific meta tags
+         Links to iOS App Store listing (update when app is published)
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <meta name="apple-itunes-app" content="app-id=XXXXXXXXXX">
+    <meta name="application-name" content="polaGram">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SEO: Schema.org Structured Data (JSON-LD)
+         Provides rich snippets in search results. Defines app as
+         MobileApplication with features, pricing, and publisher info.
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MobileApplication",
+        "name": "polaGram",
+        "operatingSystem": "iOS",
+        "applicationCategory": "PhotographyApplication",
+        "description": "Create authentic instant-style photos with vintage polaroid effects. Capture moments, shake to develop, add handwritten captions, and share with friends.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5",
+            "ratingCount": "1"
+        },
+        "featureList": [
+            "Instant photo capture",
+            "Shake-to-develop animation",
+            "Handwritten caption editor",
+            "50 vintage filters",
+            "Share to Messages and Instagram",
+            "Local gallery storage",
+            "No ads or tracking"
+        ],
+        "screenshot": "https://www.mediabrilliance.com/polagram/screenshot.png",
+        "publisher": {
+            "@type": "Organization",
+            "name": "mediaBrilliance",
+            "url": "https://www.mediabrilliance.com"
+        }
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         STYLES: Embedded CSS
+         Using embedded styles for single-page performance (no extra HTTP request).
+         CSS custom properties enable design system consistency with iOS app.
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <style>
+        /* ─────────────────────────────────────────────────────────────────────
+           CSS CUSTOM PROPERTIES (Design Tokens)
+
+           These variables mirror the Swift design system from the iOS app.
+           Source files: Colors.swift, Fonts.swift, Layout.swift
+
+           Naming convention: --pola[Category][Variant]
+           Example: --polaPinkLight = pola (brand) + Pink (color) + Light (variant)
+           ───────────────────────────────────────────────────────────────────── */
+        :root {
+            /* Brand Colors - from Colors.swift
+               Primary pink palette used for CTAs, accents, and brand identity */
+            --polaPink: rgb(232, 125, 160);           /* #E87DA0 - primary brand color */
+            --polaPinkLight: rgb(245, 184, 196);      /* #F4B8C5 - hover states, highlights */
+            --polaPinkHot: rgb(232, 90, 126);         /* #E85A7E - active/pressed states */
+
+            /* Background Gradient - from Colors.swift
+               Moody radial gradient that creates depth and warmth */
+            --polaGradientCenter: rgb(140, 135, 140); /* warm gray - gradient center */
+            --polaGradientMid: rgb(74, 64, 74);       /* muted mauve - mid transition */
+            --polaGradientEdge: rgb(46, 41, 46);      /* deep charcoal - outer edge */
+
+            /* UI Text Colors - from Colors.swift
+               Silver tones for readable text on dark backgrounds */
+            --polaSilverLight: rgb(217, 224, 235);    /* #D9E0EB - primary text */
+            --polaSilverDark: rgb(191, 204, 224);     /* #BFCCE0 - secondary/muted text */
+
+            /* Polaroid Frame Colors
+               Authentic instant photo aesthetic */
+            --polaFrameBackground: rgb(252, 250, 240); /* cream white - pola frame */
+            --polaDateStamp: rgb(232, 156, 107);       /* orange/peach - date stamp */
+
+            /* Layout Dimensions - from Layout.swift
+               Standard sizes for consistent component sizing */
+            --frameWidth: 312px;
+            --frameHeight: 392px;
+            --cornerRadius: 5px;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           FONT DECLARATIONS
+
+           Marker Felt: Headers, playful/handwritten aesthetic
+           Noteworthy: Captions, authentic handwriting feel
+           Avenir Next Condensed: Body text, clean and modern
+           ───────────────────────────────────────────────────────────────────── */
+        @font-face {
+            font-family: 'MarkerFelt';
+            src: local('Marker Felt'), local('MarkerFelt-Wide');
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           CSS RESET
+           Normalize browser defaults for consistent cross-browser rendering
+           ───────────────────────────────────────────────────────────────────── */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           BODY STYLES
+
+           Base typography and full-viewport background gradient.
+           Gradient creates atmospheric depth matching the iOS app.
+           ───────────────────────────────────────────────────────────────────── */
+        body {
+            font-family: 'Avenir Next Condensed', 'AvenirNextCondensed-Regular', -apple-system, sans-serif;
+            background: radial-gradient(
+                ellipse at 50% 40%,
+                var(--polaGradientCenter) 0%,
+                var(--polaGradientMid) 40%,
+                var(--polaGradientEdge) 100%
+            );
+            color: var(--polaSilverLight);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           HERO SECTION
+
+           Primary landing area with logo, tagline, and CTA.
+           Subtle pink radial gradient adds warmth behind logo.
+           ───────────────────────────────────────────────────────────────────── */
+        .hero {
+            text-align: center;
+            padding: 3rem 1.5rem 2rem;
+            background: radial-gradient(ellipse at center, rgba(232, 125, 160, 0.12) 0%, transparent 60%);
+        }
+
+        /* App logo with subtle glow effect */
+        .app-logo {
+            width: 260px;
+            max-width: 70vw;
+            margin-bottom: 0.75rem;
+            filter: drop-shadow(0 0 30px rgba(245, 184, 196, 0.3));
+        }
+
+        /* Tagline with gradient text effect */
+        .tagline {
+            font-family: 'Avenir Next Condensed', sans-serif;
+            font-size: 1.15rem;
+            color: var(--polaSilverLight);
+            letter-spacing: 2px;
+            text-transform: lowercase;
+            margin-bottom: 1.25rem;
+            /* Gradient text effect using background-clip */
+            background: linear-gradient(to right, var(--polaSilverLight), var(--polaSilverDark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Hero description paragraph */
+        .hero-description {
+            max-width: 500px;
+            margin: 0 auto 1.75rem;
+            color: var(--polaSilverDark);
+            font-size: 1.05rem;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           APP STORE BUTTON
+
+           Primary CTA with gradient background and hover lift effect.
+           .coming-soon variant shows outlined style before launch.
+           ───────────────────────────────────────────────────────────────────── */
+        .app-store-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--polaPink) 0%, var(--polaPinkHot) 100%);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            font-family: 'Avenir Next Condensed', sans-serif;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(232, 125, 160, 0.3);
+        }
+
+        .app-store-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(232, 125, 160, 0.4);
+        }
+
+        /* Pre-launch variant: outlined style */
+        .app-store-btn.coming-soon {
+            background: rgba(46, 41, 46, 0.8);
+            border: 2px solid var(--polaPink);
+            box-shadow: none;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           FEATURES SECTION
+
+           6-card grid showcasing app capabilities.
+           Cards use polaroid frame aesthetic (cream background).
+           ───────────────────────────────────────────────────────────────────── */
+        .features {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-family: 'Marker Felt', 'MarkerFelt-Wide', cursive;
+            font-size: 1.75rem;
+            color: var(--polaSilverLight);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        /* Responsive grid: auto-fit columns, min 250px each */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        /* Individual feature card - polaroid aesthetic */
+        .feature-card {
+            background: var(--polaFrameBackground);
+            border-radius: var(--cornerRadius);
+            padding: 1.25rem;
+            color: #333;
+            box-shadow:
+                0 4px 20px rgba(0,0,0,0.3),
+                0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card h3 {
+            font-family: 'Noteworthy', 'Bradley Hand', cursive;
+            color: #222;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: #555;
+            font-size: 0.9rem;
+            font-family: 'Avenir Next Condensed', sans-serif;
+            line-height: 1.4;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           HOW IT WORKS SECTION
+
+           4-step horizontal flow explaining user workflow.
+           Dark overlay band creates visual separation.
+           ───────────────────────────────────────────────────────────────────── */
+        .how-it-works {
+            background: rgba(0,0,0,0.3);
+            padding: 2.5rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .how-it-works h2 {
+            text-align: center;
+            font-family: 'Marker Felt', 'MarkerFelt-Wide', cursive;
+            font-size: 1.75rem;
+            color: var(--polaSilverLight);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        /* Flexbox container for step items */
+        .steps {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Individual step item */
+        .step {
+            text-align: center;
+            flex: 1;
+            min-width: 140px;
+            max-width: 170px;
+        }
+
+        /* Numbered circle with gradient background */
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--polaPink) 0%, var(--polaPinkHot) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin: 0 auto 0.75rem;
+            font-family: 'Marker Felt', cursive;
+            box-shadow: 0 4px 15px rgba(232, 125, 160, 0.4);
+        }
+
+        .step h3 {
+            font-family: 'Noteworthy', 'Bradley Hand', cursive;
+            color: var(--polaSilverLight);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .step p {
+            color: var(--polaSilverDark);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           PRIVACY SECTION
+
+           Trust-building section with privacy badges.
+           Highlights zero-tracking, local-only data storage.
+           ───────────────────────────────────────────────────────────────────── */
+        .privacy-section {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .privacy-section h2 {
+            font-family: 'Marker Felt', 'MarkerFelt-Wide', cursive;
+            font-size: 1.5rem;
+            color: var(--polaSilverLight);
+            margin-bottom: 0.75rem;
+            font-weight: 400;
+        }
+
+        .privacy-section p {
+            color: var(--polaSilverDark);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        /* Flex container for privacy badges */
+        .privacy-badges {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        /* Individual privacy badge - pill style */
+        .badge {
+            background: rgba(232, 125, 160, 0.15);
+            border: 1px solid rgba(232, 125, 160, 0.4);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--polaPinkLight);
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           FOOTER
+
+           Site footer with navigation links and copyright.
+           Subtle top border separates from content.
+           ───────────────────────────────────────────────────────────────────── */
+        footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        footer p {
+            color: var(--polaSilverDark);
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+
+        footer a {
+            color: var(--polaPink);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--polaPinkLight);
+            text-decoration: underline;
+        }
+
+        /* Footer navigation links */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ─────────────────────────────────────────────────────────────────────
+           RESPONSIVE STYLES
+
+           Progressive breakpoints for optimal viewing across devices:
+           - 900px: Tablet landscape / small desktop
+           - 768px: Tablet portrait
+           - 480px: Mobile
+           - 360px: Small mobile
+           ───────────────────────────────────────────────────────────────────── */
+
+        /* Tablet landscape / small desktop */
+        @media (max-width: 900px) {
+            .features { max-width: 100%; }
+            .feature-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* Tablet portrait */
+        @media (max-width: 768px) {
+            .hero { padding: 2.5rem 1.25rem 1.5rem; }
+            .app-logo { width: 240px; }
+            .tagline { font-size: 1.1rem; letter-spacing: 1.5px; }
+            .hero-description { font-size: 1rem; margin-bottom: 2rem; }
+            .app-store-btn { padding: 0.875rem 2rem; font-size: 1rem; }
+
+            .features { padding: 1.5rem 1.25rem; }
+            .features h2 { font-size: 1.5rem; margin-bottom: 1.25rem; }
+            .feature-grid { gap: 0.875rem; }
+            .feature-card { padding: 1rem; }
+            .feature-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+            .feature-card h3 { font-size: 1.1rem; }
+            .feature-card p { font-size: 0.9rem; }
+
+            .how-it-works { padding: 2rem 1.25rem; margin: 1rem 0; }
+            .how-it-works h2 { font-size: 1.5rem; }
+            .steps { gap: 1rem; }
+
+            .privacy-section { padding: 1.5rem 1.25rem; }
+            .privacy-section h2 { font-size: 1.35rem; }
+
+            footer { padding: 1.5rem 1.25rem; }
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+            .hero { padding: 2rem 1rem 1.25rem; }
+            .app-logo { width: 180px; }
+            .tagline { font-size: 0.95rem; letter-spacing: 1px; margin-bottom: 1.5rem; }
+            .hero-description { font-size: 0.9rem; margin-bottom: 1.5rem; padding: 0 0.5rem; }
+            .app-store-btn { padding: 0.75rem 1.5rem; font-size: 0.95rem; border-radius: 10px; }
+
+            .features { padding: 1.25rem 1rem; }
+            .features h2 { font-size: 1.35rem; margin-bottom: 1rem; }
+            .feature-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+            .feature-card { padding: 1rem; display: flex; align-items: flex-start; gap: 0.75rem; }
+            .feature-icon { font-size: 1.75rem; margin-bottom: 0; flex-shrink: 0; }
+            .feature-card h3 { font-size: 1rem; margin-bottom: 0.25rem; }
+            .feature-card p { font-size: 0.85rem; }
+
+            .how-it-works { padding: 1.5rem 1rem; margin: 0.75rem 0; }
+            .how-it-works h2 { font-size: 1.35rem; margin-bottom: 1.25rem; }
+            .steps { flex-direction: column; align-items: center; gap: 1.25rem; }
+            .step { max-width: 280px; min-width: auto; width: 100%; }
+            .step-number { width: 44px; height: 44px; font-size: 1.1rem; margin-bottom: 0.5rem; }
+            .step h3 { font-size: 1rem; margin-bottom: 0.25rem; }
+            .step p { font-size: 0.85rem; }
+
+            .privacy-section { padding: 1.25rem 1rem; }
+            .privacy-section h2 { font-size: 1.25rem; }
+            .privacy-section p { font-size: 0.85rem; }
+            .privacy-badges { gap: 0.5rem; }
+            .badge { padding: 0.4rem 0.75rem; font-size: 0.8rem; }
+
+            footer { padding: 1.25rem 1rem; }
+            .footer-links { gap: 1.25rem; font-size: 0.9rem; }
+            footer p { font-size: 0.8rem; }
+        }
+
+        /* Small mobile */
+        @media (max-width: 360px) {
+            .hero { padding: 1.5rem 0.75rem 1rem; }
+            .app-logo { width: 160px; }
+            .tagline { font-size: 0.85rem; }
+            .hero-description { font-size: 0.85rem; }
+            .app-store-btn { padding: 0.7rem 1.25rem; font-size: 0.9rem; }
+
+            .features { padding: 1rem 0.75rem; }
+            .feature-card { padding: 0.875rem; }
+
+            .how-it-works { padding: 1.25rem 0.75rem; }
+
+            .privacy-section { padding: 1rem 0.75rem; }
+            .privacy-badges { flex-direction: column; gap: 0.4rem; }
+            .badge { width: 100%; text-align: center; }
+
+            footer { padding: 1rem 0.75rem; }
+            .footer-links { flex-direction: column; gap: 0.75rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         HERO SECTION
+
+         Primary landing area containing:
+         - App logo (pG_logo.png)
+         - Tagline: "share what matters"
+         - Description paragraph
+         - App Store CTA button
+
+         The hidden H1 provides semantic structure and SEO value while
+         allowing the logo to serve as the visual header.
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <header class="hero" role="banner">
+        <!-- Hidden H1 for SEO - visually replaced by logo image -->
+        <h1 style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+            polaGram - Instant Photo App with Vintage Polaroid Effects
+        </h1>
+
+        <!-- App logo serves as visual header -->
+        <img src="pG_logo.png"
+             alt="polaGram - Instant photo app logo"
+             class="app-logo"
+             width="260"
+             height="auto">
+
+        <!-- Tagline -->
+        <p class="tagline" aria-label="Tagline: share what matters">share what matters</p>
+
+        <!-- Hero description with keywords for SEO -->
+        <p class="hero-description">
+            Create authentic instant-style photos with vintage effects.
+            Capture moments, shake to develop, add handwritten captions, and share with friends.
+        </p>
+
+        <!-- Primary CTA - App Store link (update href when published) -->
+        <a href="#"
+           class="app-store-btn coming-soon"
+           aria-label="Coming soon to the App Store">
+            Coming Soon to App Store
+        </a>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         MAIN CONTENT
+         Semantic main element wraps primary page content
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <main role="main">
+
+        <!-- ═══════════════════════════════════════════════════════════════════
+             FEATURES SECTION
+
+             6-card grid showcasing app capabilities:
+             1. Instant Capture - Camera/library photo selection
+             2. Watch It Develop - Shake-to-develop animation
+             3. Handwritten Captions - Sharpie-style text
+             4. 50 Vintage Filters - Aging effects library
+             5. Share Anywhere - Messages, Instagram, Photos
+             6. Your Gallery - Local storage and browsing
+
+             Cards use polaroid-style cream background to match app aesthetic.
+             ═══════════════════════════════════════════════════════════════════ -->
+        <section class="features" aria-labelledby="features-heading">
+            <h2 id="features-heading">Features</h2>
+
+            <div class="feature-grid" role="list">
+                <!-- Feature 1: Instant Capture -->
+                <article class="feature-card" role="listitem">
+                    <div class="feature-icon" aria-hidden="true">📸</div>
+                    <h3>Instant Capture</h3>
+                    <p>Take photos with your camera or choose from your library. Simple, familiar, fast.</p>
+                </article>
+
+                <!-- Feature 2: Development Animation -->
+                <article class="feature-card" role="listitem">
+                    <div class="feature-icon" aria-hidden="true">🎞️</div>
+                    <h3>Watch It Develop</h3>
+                    <p>Your photo appears gradually like a real instant pic. Shake your phone to speed it up.</p>
+                </article>
+
+                <!-- Feature 3: Caption Editor -->
+                <article class="feature-card" role="listitem">
+                    <div class="feature-icon" aria-hidden="true">✍️</div>
+                    <h3>Handwritten Captions</h3>
+                    <p>Add authentic Sharpie-style captions with our worn typewriter text effect.</p>
+                </article>
+
+                <!-- Feature 4: Vintage Filters -->
+                <article class="feature-card" role="listitem">
+                    <div class="feature-icon" aria-hidden="true">☕</div>
+                    <h3>50 Vintage Filters</h3>
+                    <p>Coffee stains, fold creases, sun fade, burn marks. Each pola tells a story.</p>
+                </article>
+
+                <!-- Feature 5: Sharing Options -->
+                <article class="feature-card" role="listitem">
+                    <div class="feature-icon" aria-hidden="true">📱</div>
+                    <h3>Share Anywhere</h3>
+                    <p>Send via Messages, post to Instagram Stories, or save to your photo library.</p>
+                </article>
+
+                <!-- Feature 6: Local Gallery -->
+                <article class="feature-card" role="listitem">
+                    <div class="feature-icon" aria-hidden="true">🖼️</div>
+                    <h3>Your Gallery</h3>
+                    <p>All your polas saved locally. Swipe through your memories anytime.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════════
+             HOW IT WORKS SECTION
+
+             4-step workflow guide:
+             1. Capture - Take or select photo
+             2. Develop - Watch photo appear (shake to speed up)
+             3. Caption - Add handwritten text
+             4. Share - Send or save
+
+             Numbered circles with gradient background guide users visually.
+             ═══════════════════════════════════════════════════════════════════ -->
+        <section class="how-it-works" aria-labelledby="how-it-works-heading">
+            <h2 id="how-it-works-heading">How It Works</h2>
+
+            <div class="steps" role="list">
+                <!-- Step 1: Capture -->
+                <div class="step" role="listitem">
+                    <div class="step-number" aria-hidden="true">1</div>
+                    <h3>Capture</h3>
+                    <p>Tap the frame to take a photo or choose one</p>
+                </div>
+
+                <!-- Step 2: Develop -->
+                <div class="step" role="listitem">
+                    <div class="step-number" aria-hidden="true">2</div>
+                    <h3>Develop</h3>
+                    <p>Watch your photo appear. Shake to speed it up</p>
+                </div>
+
+                <!-- Step 3: Caption -->
+                <div class="step" role="listitem">
+                    <div class="step-number" aria-hidden="true">3</div>
+                    <h3>Caption</h3>
+                    <p>Tap below the photo to add your message</p>
+                </div>
+
+                <!-- Step 4: Share -->
+                <div class="step" role="listitem">
+                    <div class="step-number" aria-hidden="true">4</div>
+                    <h3>Share</h3>
+                    <p>Send it to friends or save to your gallery</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════════
+             PRIVACY SECTION
+
+             Trust-building section highlighting privacy commitment:
+             - No analytics or tracking
+             - No cloud storage (local only)
+             - No advertising
+
+             Privacy badges provide quick visual confirmation of policies.
+             ═══════════════════════════════════════════════════════════════════ -->
+        <section class="privacy-section" aria-labelledby="privacy-heading">
+            <h2 id="privacy-heading">Your Privacy, Protected</h2>
+            <p>polaGram keeps everything on your device. No accounts, no uploads, no tracking. Your photos stay yours.</p>
+
+            <!-- Privacy badges -->
+            <div class="privacy-badges" role="list" aria-label="Privacy features">
+                <span class="badge" role="listitem">No Analytics</span>
+                <span class="badge" role="listitem">No Cloud Storage</span>
+                <span class="badge" role="listitem">No Tracking</span>
+                <span class="badge" role="listitem">No Ads</span>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         FOOTER
+
+         Site footer containing:
+         - Privacy Policy link
+         - Contact email
+         - Copyright with link to mediaBrilliance
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <footer role="contentinfo">
+        <!-- Footer navigation -->
+        <nav class="footer-links" aria-label="Footer navigation">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="mailto:hello@mediabrilliance.com">Contact</a>
+        </nav>
+
+        <!-- Copyright -->
+        <p>&copy; 2026 <a href="https://www.mediabrilliance.com">mediaBrilliance</a>. All rights reserved.</p>
+    </footer>
+</body>
+</html>
