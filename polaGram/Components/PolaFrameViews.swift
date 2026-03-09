@@ -25,7 +25,7 @@ struct PolaFrame: View {
     let onClearPhoto: () -> Void
     let isDeveloping: Bool
     let developmentProgress: Double
-    let activeFilter: PolaFilter?
+    let activeFilters: [PolaFilter]
 
     // Parallax offsets from device tilt (0 on macOS)
     var parallaxX: CGFloat = 0
@@ -182,7 +182,7 @@ struct PolaFrame: View {
         .cornerRadius(PolaLayout.cornerRadius * scale)
         .overlay(
             // Vintage Filter Overlay (on entire frame)
-            PolaFilterOverlay(filter: activeFilter, scale: scale, opacity: filterOpacity)
+            PolaFilterOverlay(filters: activeFilters, scale: scale, opacity: filterOpacity)
         )
         .clipShape(RoundedRectangle(cornerRadius: PolaLayout.cornerRadius * scale))
         .shadow(color: .black.opacity(0.4), radius: 35 * scale, x: 0, y: 18 * scale)
@@ -225,7 +225,7 @@ struct StaticPolaFrame: View {
     let photoImage: Image?
     let caption: String
     let scale: CGFloat
-    let activeFilter: PolaFilter?
+    let activeFilters: [PolaFilter]
     var showWatermark: Bool = false
 
     private let formattedDateString: String = {
@@ -335,7 +335,7 @@ struct StaticPolaFrame: View {
         )
         .overlay(
             // Vintage filter overlay (coffee stains, folds, etc.)
-            PolaFilterOverlay(filter: activeFilter, scale: scale)
+            PolaFilterOverlay(filters: activeFilters, scale: scale)
         )
         .clipShape(RoundedRectangle(cornerRadius: PolaLayout.cornerRadius * scale))
         .overlay(
@@ -478,6 +478,86 @@ struct PlaceholderView: View {
     }
 }
 
+// MARK: - Sharpie Icon
+
+/// Writing/marker icon to indicate caption editability.
+/// Based on tabler-icons "writing-sign" SVG.
+struct SharpieIcon: View {
+    let size: CGFloat
+    let color: Color
+
+    var body: some View {
+        Canvas { context, canvasSize in
+            let scale = size / 24.0
+
+            // Writing hand/scribble path
+            var writingPath = Path()
+            writingPath.move(to: CGPoint(x: 3 * scale, y: 19 * scale))
+            writingPath.addCurve(
+                to: CGPoint(x: 8 * scale, y: 13 * scale),
+                control1: CGPoint(x: 6.333 * scale, y: 17 * scale),
+                control2: CGPoint(x: 8 * scale, y: 15 * scale)
+            )
+            writingPath.addCurve(
+                to: CGPoint(x: 6 * scale, y: 10 * scale),
+                control1: CGPoint(x: 8 * scale, y: 10 * scale),
+                control2: CGPoint(x: 7 * scale, y: 10 * scale)
+            )
+            writingPath.addCurve(
+                to: CGPoint(x: 8.5 * scale, y: 14 * scale),
+                control1: CGPoint(x: 4 * scale, y: 11.085 * scale),
+                control2: CGPoint(x: 4.034 * scale, y: 13.048 * scale)
+            )
+            writingPath.addCurve(
+                to: CGPoint(x: 12 * scale, y: 15 * scale),
+                control1: CGPoint(x: 10 * scale, y: 16 * scale),
+                control2: CGPoint(x: 11 * scale, y: 16.5 * scale)
+            )
+            writingPath.addCurve(
+                to: CGPoint(x: 13.5 * scale, y: 12.5 * scale),
+                control1: CGPoint(x: 12.667 * scale, y: 14 * scale),
+                control2: CGPoint(x: 13.167 * scale, y: 13.167 * scale)
+            )
+            writingPath.addCurve(
+                to: CGPoint(x: 17.5 * scale, y: 16 * scale),
+                control1: CGPoint(x: 14.5 * scale, y: 14.833 * scale),
+                control2: CGPoint(x: 15.833 * scale, y: 16 * scale)
+            )
+            writingPath.addLine(to: CGPoint(x: 20 * scale, y: 16 * scale))
+
+            context.stroke(writingPath, with: .color(color), style: StrokeStyle(lineWidth: 1.5 * scale, lineCap: .round, lineJoin: .round))
+
+            // Marker/pen body
+            var markerPath = Path()
+            markerPath.move(to: CGPoint(x: 20 * scale, y: 17 * scale))
+            markerPath.addLine(to: CGPoint(x: 20 * scale, y: 5 * scale))
+            markerPath.addCurve(
+                to: CGPoint(x: 18 * scale, y: 3 * scale),
+                control1: CGPoint(x: 20 * scale, y: 3.879 * scale),
+                control2: CGPoint(x: 19.121 * scale, y: 3 * scale)
+            )
+            markerPath.addCurve(
+                to: CGPoint(x: 16 * scale, y: 5 * scale),
+                control1: CGPoint(x: 16.879 * scale, y: 3 * scale),
+                control2: CGPoint(x: 16 * scale, y: 3.879 * scale)
+            )
+            markerPath.addLine(to: CGPoint(x: 16 * scale, y: 17 * scale))
+            markerPath.addLine(to: CGPoint(x: 18 * scale, y: 19 * scale))
+            markerPath.addLine(to: CGPoint(x: 20 * scale, y: 17 * scale))
+
+            context.stroke(markerPath, with: .color(color), style: StrokeStyle(lineWidth: 1.5 * scale, lineCap: .round, lineJoin: .round))
+
+            // Marker tip line
+            var tipPath = Path()
+            tipPath.move(to: CGPoint(x: 16 * scale, y: 7 * scale))
+            tipPath.addLine(to: CGPoint(x: 20 * scale, y: 7 * scale))
+
+            context.stroke(tipPath, with: .color(color), style: StrokeStyle(lineWidth: 1.5 * scale, lineCap: .round, lineJoin: .round))
+        }
+        .frame(width: size, height: size)
+    }
+}
+
 // MARK: - Caption Area
 
 /// Caption display and edit area on the pola frame.
@@ -495,20 +575,31 @@ struct CaptionArea: View {
     var body: some View {
         ZStack {
             if caption.isEmpty {
-                Text(currentPlaceholder)
-                    .font(.custom("AvenirNextCondensed-Light", size: PolaLayout.placeholderTextSize * scale))
-                    .foregroundColor(.black.opacity(0.25))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(nil)
-                    .lineSpacing(2 * scale)
-                    .kerning(0.5)
-                    .blur(radius: 0.35)
-                    .rotationEffect(.degrees(placeholderRotation))
-                    .padding(.bottom, 4 * scale)
-                    .onAppear {
-                        placeholderOpacity = 0.22
-                        placeholderRotation = Double.random(in: -1.2...1.2)
-                    }
+                ZStack(alignment: .trailing) {
+                    // Caption placeholder - centered with equal padding both sides
+                    let iconSpace = PolaLayout.captionHeight * scale * 0.8 * 0.82 + 8 * scale
+                    Text(currentPlaceholder)
+                        .font(.custom("AvenirNextCondensed-Light", size: PolaLayout.placeholderTextSize * scale))
+                        .foregroundColor(.black.opacity(0.25))
+                        .multilineTextAlignment(.center)
+                        .lineLimit(nil)
+                        .lineSpacing(2 * scale)
+                        .kerning(0.5)
+                        .blur(radius: 0.35)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, iconSpace)
+                        .rotationEffect(.degrees(placeholderRotation))
+
+                    // Sharpie icon - right edge, 80% of caption height
+                    SharpieIcon(size: PolaLayout.captionHeight * scale * 0.8 * 0.82, color: .black.opacity(0.8))
+                        .rotationEffect(.degrees(-12))
+                        .offset(x: -4 * scale)
+                }
+                .padding(.bottom, 4 * scale)
+                .onAppear {
+                    placeholderOpacity = 0.22
+                    placeholderRotation = Double.random(in: -1.2...1.2)
+                }
             } else {
                 // Broken Hemingway typewriter aesthetic
                 GeometryReader { geo in

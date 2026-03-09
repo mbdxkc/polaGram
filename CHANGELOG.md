@@ -1,5 +1,61 @@
 # polaGram Changelog
 
+## v2.4 - Caption Polish & App Store Ready (March 9, 2026)
+
+### Caption Area Enhancement
+- **Sharpie icon indicator**: Prominent writing icon in caption placeholder
+  - 80% of caption height, responsive to frame size
+  - Right-aligned with -12° tilt for character
+  - 80% opacity for visibility
+  - Caption text stays perfectly centered with balanced padding
+
+### App Store Submission
+- **APP_STORE_METADATA.md**: Complete metadata ready to paste
+  - App name, subtitle (23 chars), description (1,847 chars)
+  - Keywords (97 chars), What's New text
+  - Age rating questionnaire answers
+- **APP_STORE_SUBMISSION.md**: Step-by-step submission guide
+  - Screenshot requirements and capture instructions
+  - App Store Connect setup walkthrough
+  - Review notes template
+  - Common rejection reasons to avoid
+
+### Project Updates
+- Version bumped to 2.3 in Xcode project
+- Website updated with stacking effects feature
+- Privacy policy and terms of service current
+
+---
+
+## v2.3 - Stacked Filter Effects (March 9, 2026)
+
+### Filter System Overhaul
+- **Stacking probability system** for vintage effects:
+  - 20% pristine (no effects)
+  - 40% get 1 effect
+  - 20% get 2 effects
+  - 10% get 3 effects
+  - 5% get 4 effects
+  - 4% get 5 effects
+  - 1% "mangled" (angry ex treatment - crumpled, burned, stained chaos)
+
+### The "Mangled" Treatment
+- Rare 1% chance for extreme damage stack:
+  - Multiple burn marks (cigarette, match, edge burns)
+  - Crumpled with many folds and creases
+  - Coffee/water damage stains
+  - Heavy aging, scratches, and wear
+  - Random light leaks and chemical damage
+  - Image still visible through the chaos
+
+### Technical Changes
+- `PolaFilter.randomFilters()` returns `[PolaFilter]` array
+- `PolaFilterOverlay` now stacks multiple effects in ZStack
+- `SavedPola` model updated for multi-filter storage
+- Backwards-compatible with legacy single-filter code
+
+---
+
 ## v2.1 - Branding Update (March 1, 2026)
 
 ### Trademark Compliance

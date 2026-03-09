@@ -18,13 +18,13 @@ import SwiftUI
 ///
 /// Usage:
 /// ```swift
-/// @State private var activeFilter: PolaFilter? = nil
+/// @State private var activeFilters: [PolaFilter] = []
 ///
 /// // On photo load:
-/// activeFilter = PolaFilter.randomFilter()
+/// activeFilters = PolaFilter.randomFilters()
 ///
 /// // In view:
-/// photoImage.overlay(PolaFilterOverlay(filter: activeFilter, scale: scale))
+/// photoImage.overlay(PolaFilterOverlay(filters: activeFilters, scale: scale))
 /// ```
 enum PolaFilter: Int, CaseIterable {
     // ─────────────────────────────────────────────────────────────────────────
@@ -106,10 +106,96 @@ enum PolaFilter: Int, CaseIterable {
     case chemicalSpill = 50
 
     /// Returns a random filter 80% of the time, nil (pristine pola) 20% of the time.
+    /// DEPRECATED: Use randomFilters() for stacked effects
     static func randomFilter() -> PolaFilter? {
         // 20% chance of pristine pola (no effect)
         guard Int.random(in: 1...5) != 1 else { return nil }
         return Self.allCases.randomElement()
+    }
+
+    /// Returns an array of random filters with stacking probability:
+    /// - 20% pristine (no effects)
+    /// - 40% get 1 effect
+    /// - 20% get 2 effects
+    /// - 10% get 3 effects
+    /// - 5% get 4 effects
+    /// - 4% get 5 effects
+    /// - 1% "mangled" - angry ex crumpled and tried to burn it
+    static func randomFilters() -> [PolaFilter] {
+        let roll = Int.random(in: 1...100)
+
+        let effectCount: Int
+        switch roll {
+        case 1:
+            // 1% - The "angry ex" mangled treatment
+            return mangledFilters()
+        case 2...5:
+            // 4% - 5 effects
+            effectCount = 5
+        case 6...10:
+            // 5% - 4 effects
+            effectCount = 4
+        case 11...20:
+            // 10% - 3 effects
+            effectCount = 3
+        case 21...40:
+            // 20% - 2 effects
+            effectCount = 2
+        case 41...80:
+            // 40% - 1 effect
+            effectCount = 1
+        default:
+            // 20% - pristine, no effects
+            return []
+        }
+
+        return pickUniqueFilters(count: effectCount)
+    }
+
+    /// Pick N unique random filters
+    private static func pickUniqueFilters(count: Int) -> [PolaFilter] {
+        var available = Self.allCases.shuffled()
+        var result: [PolaFilter] = []
+
+        for _ in 0..<min(count, available.count) {
+            if let filter = available.popLast() {
+                result.append(filter)
+            }
+        }
+
+        return result
+    }
+
+    /// The "angry ex" treatment - a mangled mess with many stacked effects.
+    /// Like someone crumpled it up, tried to burn it, spilled coffee on it,
+    /// maybe ran it through a washing machine, but you can still sort of make out the image.
+    private static func mangledFilters() -> [PolaFilter] {
+        var filters: [PolaFilter] = []
+
+        // Always include heavy damage indicators
+        // Multiple burns (at least 2-3)
+        let burns: [PolaFilter] = [.burnEdgeBottom, .burnEdgeCorner, .burnEdgeTop, .cigaretteBurn, .matchBurn, .burnSpotRandom]
+        filters.append(contentsOf: burns.shuffled().prefix(Int.random(in: 2...4)))
+
+        // Multiple folds/creases (crumpled up)
+        let folds: [PolaFilter] = [.foldHorizontal, .foldVertical, .foldDiagonal, .creaseMultiple, .wrinkled, .bentCorner]
+        filters.append(contentsOf: folds.shuffled().prefix(Int.random(in: 3...5)))
+
+        // Coffee/liquid damage
+        let stains: [PolaFilter] = [.coffeeRingTopLeft, .coffeeRingBottomRight, .coffeeSpillCorner, .coffeeDripStain, .waterDamageHeavy]
+        filters.append(contentsOf: stains.shuffled().prefix(Int.random(in: 2...3)))
+
+        // Age and wear
+        let aged: [PolaFilter] = [.yellowedAge, .dustyOld, .scratchedSurface, .pocketWorn, .tornEdge, .peelingSurface]
+        filters.append(contentsOf: aged.shuffled().prefix(Int.random(in: 2...4)))
+
+        // Maybe some chemical/light damage for extra chaos
+        if Bool.random() {
+            filters.append([.chemicalSpill, .lightLeak, .lightLeakWarm, .overexposedEdge].randomElement()!)
+        }
+
+        // Shuffle the final result for random layering order
+        return filters.shuffled()
     }
 
     /// Human-readable name for the filter (for debugging/accessibility)
@@ -181,13 +267,27 @@ enum PolaFilter: Int, CaseIterable {
 /// Usage:
 /// ```swift
 /// photoImage
-///     .overlay(PolaFilterOverlay(filter: activeFilter, scale: scale))
+///     .overlay(PolaFilterOverlay(filters: activeFilters, scale: scale))
 /// ```
 struct PolaFilterOverlay: View {
-    let filter: PolaFilter?
+    let filters: [PolaFilter]
     let scale: CGFloat
     /// Opacity for fade-in animation after development completes (0.0 to 1.0)
     var opacity: Double = 1.0
+
+    /// Legacy initializer for single filter (backwards compatibility)
+    init(filter: PolaFilter?, scale: CGFloat, opacity: Double = 1.0) {
+        self.filters = filter.map { [$0] } ?? []
+        self.scale = scale
+        self.opacity = opacity
+    }
+
+    /// New initializer for multiple filters
+    init(filters: [PolaFilter], scale: CGFloat, opacity: Double = 1.0) {
+        self.filters = filters
+        self.scale = scale
+        self.opacity = opacity
+    }
 
     // ─────────────────────────────────────────────────────────────────────────
     // Color Constants for Vintage Effects
@@ -213,8 +313,10 @@ struct PolaFilterOverlay: View {
 
     var body: some View {
         GeometryReader { geo in
-            if let filter = filter {
-                filterContent(for: filter, in: geo.size)
+            ZStack {
+                ForEach(filters, id: \.rawValue) { filter in
+                    filterContent(for: filter, in: geo.size)
+                }
             }
         }
         .opacity(opacity)

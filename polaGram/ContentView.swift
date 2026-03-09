@@ -40,7 +40,7 @@ struct ContentView: View {
     @State private var isDeveloping = false
     @State private var developmentProgress = 0.0
     @State private var developmentTimer: Timer? = nil
-    @State private var activeFilter: PolaFilter? = nil
+    @State private var activeFilters: [PolaFilter] = []
 
     // Photo picker
     @State private var selectedPhotoItem: PhotosPickerItem? = nil
@@ -145,14 +145,14 @@ struct ContentView: View {
                     PolaFrame(
                         photoImage: photoImage, caption: $caption, scale: scale,
                         onAddPhoto: addPhoto, onEditCaption: { showCaptionEditor = true }, onClearPhoto: clearPhoto,
-                        isDeveloping: isDeveloping, developmentProgress: developmentProgress, activeFilter: activeFilter,
+                        isDeveloping: isDeveloping, developmentProgress: developmentProgress, activeFilters: activeFilters,
                         parallaxX: parallaxManager.xOffset, parallaxY: parallaxManager.yOffset
                     )
                     #else
                     PolaFrame(
                         photoImage: photoImage, caption: $caption, scale: scale,
                         onAddPhoto: addPhoto, onEditCaption: { showCaptionEditor = true }, onClearPhoto: clearPhoto,
-                        isDeveloping: isDeveloping, developmentProgress: developmentProgress, activeFilter: activeFilter
+                        isDeveloping: isDeveloping, developmentProgress: developmentProgress, activeFilters: activeFilters
                     )
                     #endif
                     Spacer()
@@ -199,7 +199,7 @@ struct ContentView: View {
         SoundManager.shared.playHaptic(.medium)
         isDeveloping = true
         developmentProgress = 0.0
-        activeFilter = PolaFilter.randomFilter()
+        activeFilters = PolaFilter.randomFilters()
 
         let interval = 0.1, increment = interval / 20.0
         var ticks = 0
@@ -229,7 +229,7 @@ struct ContentView: View {
         developmentTimer?.invalidate()
         developmentTimer = nil
         selectedPhotoItem = nil
-        activeFilter = nil
+        activeFilters = []
     }
 
     private func addPhoto() {
@@ -259,13 +259,13 @@ struct ContentView: View {
                 }
 
                 let currentCaption = caption, currentPhoto = photoImage
-                let currentFilter = activeFilter, currentWatermark = showWatermark
+                let currentFilters = activeFilters, currentWatermark = showWatermark
                 let renderer = ImageRenderer(content:
                     StaticPolaFrame(
                         photoImage: currentPhoto,
                         caption: currentCaption,
                         scale: 2.0,
-                        activeFilter: currentFilter,
+                        activeFilters: currentFilters,
                         showWatermark: currentWatermark
                     )
                         .frame(width: PolaLayout.frameWidth * 2.0, height: PolaLayout.frameHeight * 2.0)
@@ -291,7 +291,7 @@ struct ContentView: View {
                 let savedPola = SavedPola(
                     imageData: jpegData,
                     caption: currentCaption,
-                    filterRawValue: currentFilter?.rawValue
+                    filterRawValues: currentFilters.map { $0.rawValue }
                 )
                 modelContext.insert(savedPola)
 
@@ -320,7 +320,7 @@ struct ContentView: View {
             // Capture current values
             let currentCaption = caption
             let currentPhoto = photoImage
-            let currentFilter = activeFilter
+            let currentFilters = activeFilters
             let currentWatermark = showWatermark
 
             // Render the pola frame using ImageRenderer
@@ -329,7 +329,7 @@ struct ContentView: View {
                     photoImage: currentPhoto,
                     caption: currentCaption,
                     scale: 1.0,
-                    activeFilter: currentFilter,
+                    activeFilters: currentFilters,
                     showWatermark: currentWatermark
                 )
             )
@@ -362,7 +362,7 @@ struct ContentView: View {
                         let savedPola = SavedPola(
                             imageData: jpegData,
                             caption: currentCaption,
-                            filterRawValue: currentFilter?.rawValue
+                            filterRawValues: currentFilters.map { $0.rawValue }
                         )
                         modelContext.insert(savedPola)
 
@@ -386,7 +386,7 @@ struct ContentView: View {
         let renderer = ImageRenderer(content:
             StaticPolaFrame(
                 photoImage: photoImage, caption: caption, scale: 2.0,
-                activeFilter: activeFilter, showWatermark: showWatermark
+                activeFilters: activeFilters, showWatermark: showWatermark
             )
             .frame(width: PolaLayout.frameWidth * 2.0, height: PolaLayout.frameHeight * 2.0)
         )
@@ -409,7 +409,7 @@ struct ContentView: View {
         let renderer = ImageRenderer(content:
             StaticPolaFrame(
                 photoImage: photoImage, caption: caption, scale: 2.0,
-                activeFilter: activeFilter, showWatermark: showWatermark
+                activeFilters: activeFilters, showWatermark: showWatermark
             )
             .frame(width: PolaLayout.frameWidth * 2.0, height: PolaLayout.frameHeight * 2.0)
         )

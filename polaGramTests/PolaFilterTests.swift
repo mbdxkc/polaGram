@@ -11,9 +11,9 @@ import XCTest
 
 final class PolaFilterTests: XCTestCase {
 
-    // MARK: - Randomization Tests
+    // MARK: - Legacy Randomization Tests
 
-    /// Test that randomFilter returns nil approximately 50% of the time
+    /// Test that randomFilter returns nil approximately 20% of the time (legacy)
     func testRandomFilter_pristineRate() {
         var pristineCount = 0
         let totalSamples = 1000
@@ -25,9 +25,9 @@ final class PolaFilterTests: XCTestCase {
         }
 
         let rate = Double(pristineCount) / Double(totalSamples)
-        // Should be roughly 50%, allow ±10% variance
-        XCTAssertGreaterThan(rate, 0.40, "Pristine rate should be > 40%")
-        XCTAssertLessThan(rate, 0.60, "Pristine rate should be < 60%")
+        // Should be roughly 20%, allow ±10% variance
+        XCTAssertGreaterThan(rate, 0.10, "Pristine rate should be > 10%")
+        XCTAssertLessThan(rate, 0.30, "Pristine rate should be < 30%")
     }
 
     /// Test that all filters are represented in random selection
@@ -45,6 +45,59 @@ final class PolaFilterTests: XCTestCase {
         let allFilterCount = PolaFilter.allCases.count
         XCTAssertGreaterThan(seenFilters.count, allFilterCount / 2,
             "Should see at least half of all filters in \(maxIterations) iterations")
+    }
+
+    // MARK: - New Multi-Filter Randomization Tests
+
+    /// Test that randomFilters returns empty array approximately 20% of the time
+    func testRandomFilters_pristineRate() {
+        var pristineCount = 0
+        let totalSamples = 1000
+
+        for _ in 0..<totalSamples {
+            if PolaFilter.randomFilters().isEmpty {
+                pristineCount += 1
+            }
+        }
+
+        let rate = Double(pristineCount) / Double(totalSamples)
+        // Should be roughly 20%, allow ±8% variance
+        XCTAssertGreaterThan(rate, 0.12, "Pristine rate should be > 12%")
+        XCTAssertLessThan(rate, 0.28, "Pristine rate should be < 28%")
+    }
+
+    /// Test filter count distribution
+    func testRandomFilters_countDistribution() {
+        var countHistogram = [Int: Int]()
+        let totalSamples = 10000
+
+        for _ in 0..<totalSamples {
+            let filters = PolaFilter.randomFilters()
+            countHistogram[filters.count, default: 0] += 1
+        }
+
+        // Should see some with 0 effects (~20%)
+        XCTAssertGreaterThan(countHistogram[0] ?? 0, 1000, "Should have >10% pristine")
+
+        // Should see some with 1 effect (~40%)
+        XCTAssertGreaterThan(countHistogram[1] ?? 0, 3000, "Should have >30% with 1 effect")
+
+        // Should see some with multiple effects
+        let multiEffects = countHistogram.filter { $0.key > 1 }.values.reduce(0, +)
+        XCTAssertGreaterThan(multiEffects, 2000, "Should have >20% with 2+ effects")
+
+        // Should occasionally see "mangled" (many effects)
+        let mangledCount = countHistogram.filter { $0.key >= 8 }.values.reduce(0, +)
+        XCTAssertGreaterThan(mangledCount, 0, "Should have at least some mangled polas")
+    }
+
+    /// Test that filters in array are unique
+    func testRandomFilters_uniqueInArray() {
+        for _ in 0..<100 {
+            let filters = PolaFilter.randomFilters()
+            let uniqueFilters = Set(filters)
+            XCTAssertEqual(filters.count, uniqueFilters.count, "All filters in array should be unique")
+        }
     }
 
     // MARK: - Filter Count Test
@@ -67,12 +120,12 @@ final class PolaFilterTests: XCTestCase {
         }
     }
 
-    /// Test that raw values start at 0 and are sequential
+    /// Test that raw values start at 1 and are sequential
     func testRawValues_sequential() {
         let rawValues = PolaFilter.allCases.map { $0.rawValue }.sorted()
         for (index, rawValue) in rawValues.enumerated() {
-            XCTAssertEqual(rawValue, index,
-                "Raw value at index \(index) should be \(index), got \(rawValue)")
+            XCTAssertEqual(rawValue, index + 1,
+                "Raw value at index \(index) should be \(index + 1), got \(rawValue)")
         }
     }
 

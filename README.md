@@ -20,7 +20,7 @@ Splash Screen → Tap pola frame → Camera/Library → Photo develops → Add c
 |---------|-------------|
 | Camera | Native iOS camera or photo library picker |
 | Development | 20-second animation with shake acceleration |
-| Filters | 50 vintage effects (50% chance on each photo) |
+| Filters | 50 vintage effects with stacking (80% get 1+, 1% get "mangled") |
 | Caption | 24-char limit, worn typewriter font effect |
 | Gallery | Local persistence, swipeable stack layout |
 | Sounds | System sounds for capture, develop, save, share |
@@ -212,6 +212,8 @@ Images stored externally for memory efficiency. Query sorted by `createdAt` desc
 | 2.0 | Mar 1, 2026 | Sounds, haptics, watermark, onboarding |
 | 2.1 | Mar 1, 2026 | Branding update, code cleanup |
 | 2.2 | Mar 7, 2026 | Modular architecture refactor, timer leak fix |
+| 2.3 | Mar 9, 2026 | Stacked filter effects, "mangled" rare variant |
+| 2.4 | Mar 9, 2026 | Sharpie caption icon, App Store submission ready |
 
 ---
 
